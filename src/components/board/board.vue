@@ -1,21 +1,18 @@
 <script>
+/* eslint-disable */
+import store from '@/store/store';
 export default {
     name:"Board",
     data(){
         return{
-            initial:[
-                [0,0,0,0],
-                [0,0,0,0],
-                [0,0,0,0],
-                [0,0,0,0]
-            ],
             datas: [
                 [0,0,0,0],
                 [0,0,0,0],
                 [0,0,0,0],
                 [0,0,0,0]
             ],
-            pressed:""
+            pressed:"",
+            score : 0
         }
     },
     methods:{
@@ -91,6 +88,9 @@ export default {
             for(let i=0;i<3;i++){
                 if(data[i]==data[i+1]){
                     data[i] = data[i] + data[i+1]
+                    this.score = store.state.points
+                    this.score += data[i]
+                    store.commit('setPoints',this.score)
                     data[i+1] = 0
                 }
             }
@@ -100,11 +100,11 @@ export default {
         // Function Reorder
         rereverse(array = this.datas,arrayLength = 4){
             var newArray = [];
-            for(var i = 0; i < array.length; i++){
+            for(let i = 0; i < array.length; i++){
                 newArray.push([]);
             };
 
-            for(var i = 0; i < array.length; i++){
+            for(let i = 0; i < array.length; i++){
                 for(var j = 0; j < arrayLength; j++){
                     newArray[j].push(array[i][j]);
                 };
@@ -142,6 +142,7 @@ export default {
 
 <template>
     <div class="main" v-on:Keyup.up="this.events">
+       <!-- <h2>Your Score : {{score}}</h2> -->
         <table >
             <tr v-for="(row,rkey) in datas" v-bind:key="rkey" class="rows" >
                 <td v-for="(col,ckey) in row" v-bind:key="ckey" :class="addClass(col)">
@@ -149,17 +150,16 @@ export default {
                 </td>
             </tr>
         </table>
-
-        <div>
-            {{pressed}}
-        </div>
     </div>
 </template>
 <style>
     div.main{
         width: 50%;
         height: 500px;
-        border: 1px solid #ccc
+        border: 1px solid #ccc;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 40px;
     }
     table{
         height: 100%;
@@ -174,7 +174,8 @@ export default {
     .columns{
         width: 25%;
         border-right: 1px solid #ccc;
-        border-bottom: 1px solid #ccc
+        border-bottom: 1px solid #ccc;
+        transition: 400ms;
     }
     div.clear{
         clear: both;
@@ -214,20 +215,3 @@ export default {
         font-family: fantasy;
     }
 </style>
-
-0 0 0 0
-0 0 0 0
-0 0 0 0
-0 0 0 0
-
-
-[[0,0,2,16],
-[0,2,0,2],
-[2,4,0,6],
-[4,4,8,8]]
-
-
-[0,0,2,4],
-[0,2,4,4],
-[2,0,0,8],
-[16,2,6,8],
