@@ -23,13 +23,16 @@ export default {
             switch(e.key){
                 case "ArrowUp":
                     this.pressed = "Up"
-                    this.rereverse()
+                    this.datas = this.rereverse()
                     this.main()
-                    this.rereverse()
+                    this.datas = this.rereverse()
                     
                     break;
                 case "ArrowDown":
                     this.pressed = "Down"
+                    this.datas = this.rereverse()
+                    this.main(1)
+                    this.datas = this.rereverse()
                     break;
                 case "ArrowLeft":
                     this.pressed = "Left"
@@ -95,22 +98,23 @@ export default {
         },
 
         // Function Reorder
-        rereverse(data = this.datas){
-            let newArray = this.initial
-            for(let row = 0;row<newArray.length;row++){
-                for(let col=0;col<newArray.length;col++){
-                    newArray[col][row] = this.datas[row][col]
-                }
-            }
-            console.log('====================================');
-            console.table(newArray);
-            console.log('====================================');
-            this.datas = newArray
-            
-            return newArray
-            //return newArray;
+        rereverse(array = this.datas,arrayLength = 4){
+            var newArray = [];
+            for(var i = 0; i < array.length; i++){
+                newArray.push([]);
+            };
+
+            for(var i = 0; i < array.length; i++){
+                for(var j = 0; j < arrayLength; j++){
+                    newArray[j].push(array[i][j]);
+                };
+            };
+            return newArray;
         },
-        
+        doubleReverse(data){
+            let r1 = this.rereverse(data)
+            this.rereverse(r1)
+        },
         // Function Main
         main(reverse=0){
             for(let i=0;i<4;i++){
@@ -120,9 +124,13 @@ export default {
             }
             this.addNumber()
             return this.datas
+        },
+        addClass(val){
+            return "columns val"+val
         }
 
     },
+    
     created: function () {
         window.addEventListener('keyup', this.events)
         this.addNumber()
@@ -136,7 +144,7 @@ export default {
     <div class="main" v-on:Keyup.up="this.events">
         <table >
             <tr v-for="(row,rkey) in datas" v-bind:key="rkey" class="rows" >
-                <td v-for="(col,ckey) in row" v-bind:key="ckey" class="columns">
+                <td v-for="(col,ckey) in row" v-bind:key="ckey" :class="addClass(col)">
                     <h5 v-if="col != 0">{{col}}</h5>
                 </td>
             </tr>
@@ -156,6 +164,7 @@ export default {
     table{
         height: 100%;
         width: 100%;
+        background: #CCC0B4
     }
     .rows{
          width: 100%;
@@ -170,6 +179,40 @@ export default {
     div.clear{
         clear: both;
     }
+    td.val2{
+        background-color: #EEE4DB
+    }
+    td.val4{
+        background-color: #EDE0C9
+    }
+    td.val8{
+        background-color: #F1B17D;
+        color:white
+    }
+    td.val16{
+        background-color: #F39568;
+        color:white
+    }
+    td.val32{
+        background-color: #F47C63;
+        color:white
+    }
+    td.val64{
+        background-color: #F45F43;
+        color:white
+    }
+    td.val128{
+        background-color: #ECCE78;
+        color:white
+    }
+    td.val256{
+        background-color: #ECCB69;
+        color:white
+    }
+    h5{
+        font-size: 25px;
+        font-family: fantasy;
+    }
 </style>
 
 0 0 0 0
@@ -182,3 +225,9 @@ export default {
 [0,2,0,2],
 [2,4,0,6],
 [4,4,8,8]]
+
+
+[0,0,2,4],
+[0,2,4,4],
+[2,0,0,8],
+[16,2,6,8],
