@@ -33,9 +33,9 @@ export default {
   },
   data(){
     return{
-      user:"",
+      user:"Ronald",
       board:"",
-      valid:false
+      valid:true
     }
   },
   created(){
